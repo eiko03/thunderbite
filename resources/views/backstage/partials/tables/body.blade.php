@@ -10,6 +10,8 @@
                                 {{ $row->{$column['attribute']} }}
                             @elseif( isset($column['relationship']))
                                 {{ $row->{$column['relationship']}($row) }}
+                            @elseif( isset($column['image']) && $column['image'])
+                                <img width="40" src="{{ asset($row->image) }}" class="img-responsive" />
                             @elseif( isset($column['array']))
                                 {!! collect($row->{$column['array']}) !!}    
                             @elseif( isset($column['model']) )                             

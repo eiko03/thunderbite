@@ -16,31 +16,32 @@ class Game extends Model
         'revealed_at',
     ];
 
-    public static function filter()
+    public static function filter($filter1, $filter2, $filter3, $filter4)
     {
         $query = self::query();
         $campaign = Campaign::find(session('activeCampaign'));
 
         self::filterDates($query, $campaign);
 
-        if ($data = request('filter1')) {
-            $query->where('account', 'like', $data.'%');
+        if ($filter1 != '') {
+            $query->where('account', 'like', '%'.$filter1.'%');
         }
 
-        if ($data = request('filter2')) {
-            $query->where('prize_id', $data);
+        if ($filter2 != '') {
+            $query->where('prize_id', $filter2);
         }
 
-        if ($data = request('filter3')) {
-            $query->whereRaw('HOUR(revealed_at) >= '.$data);
+        if ($filter3 != '') {
+            $query->whereRaw('HOUR(revealed_at) >= '.$filter3);
         }
 
-        if ($data = request('filter4')) {
-            $query->whereRaw('HOUR(revealed_at) <= '.$data);
+        if ($filter4 != '') {
+            $query->whereRaw('HOUR(revealed_at) <= '.$filter4);
         }
 
         $query->leftJoin('prizes', 'prizes.id', '=', 'games.prize_id')
-            ->select('games.id', 'account', 'prize_id', 'revealed_at', 'prizes.title')
+            ->join('campaigns', 'campaigns.id', '=', 'games.campaign_id')
+            ->select('campaigns.name as campaign','games.id', 'account', 'prize_id', 'points', 'symbols','revealed_at', 'prizes.name as prize_title')
             ->where('games.campaign_id', $campaign->id);
 
         return $query;

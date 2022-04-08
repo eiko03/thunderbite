@@ -36,6 +36,12 @@ return [
             'throw' => false,
         ],
 
+        'symbols' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/symbols'),
+            'throw' => false,
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),

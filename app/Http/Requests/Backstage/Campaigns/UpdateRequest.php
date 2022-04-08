@@ -25,16 +25,10 @@ namespace App\Http\Requests\Backstage\Campaigns;
         public function rules()
         {
             return [
-                'name' => 'required',
+                'name' => 'required|max:255|unique:campaigns,name',
                 'timezone' => 'required',
                 'starts_at' => 'required|date_format:d-m-Y H:i:s',
-                'totalspins' => 'required',
-                'spin_schedule' => 'required',
-                'ends_at' => 'required|date_format:d-m-Y H:i:s|after:starts_at',
-                'targeting' => 'required',
-                'segmentation' => 'required',
-                'games_allowed' => 'required|numeric',
-                'games_frequency' => 'required',
+                'ends_at' => 'required|date_format:d-m-Y H:i:s',
             ];
         }
     }

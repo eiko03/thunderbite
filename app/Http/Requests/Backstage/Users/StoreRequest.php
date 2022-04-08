@@ -27,6 +27,7 @@ class StoreRequest extends FormRequest
         return [
             'name' => 'required',
             'email' => 'required|email|unique:users',
+            'username' => 'required|unique:users',
             'level' => [
                 Rule::in(['admin', 'download', 'readonly']),
                 'required',

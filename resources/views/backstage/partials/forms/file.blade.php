@@ -8,8 +8,6 @@
             <input type="file" name="{{ $field }}" value="{{ $value ?? '' }}" class="custom-file-input @error($field) is-invalid @enderror">
             <label class="custom-file-label" for="customFile"> {{ $cta ?? 'Click to upload a file'}}  </label>
         </div>
-
-
         @error($field)
         <span class="invalid-feedback" role="alert">
             <strong>{{ $message }}</strong>

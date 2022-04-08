@@ -28,11 +28,13 @@ class PrizeTable extends TableComponent
 
             [
                 'title' => 'startDate',
+                'attribute' => 'starts_at',
                 'sort' => true,
             ],
 
             [
                 'title' => 'endDate',
+                'attribute' => 'ends_at',
                 'sort' => true,
             ],
         ];

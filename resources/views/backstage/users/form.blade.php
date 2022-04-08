@@ -15,6 +15,12 @@
     'value' => old('name') ?? $user->name,
 ])
 
+@include('backstage.partials.forms.text', [
+    'field' => 'username',
+    'label' => 'Username',
+    'value' => old('username') ?? $user->username,
+])
+
 @include('backstage.partials.forms.email', [
     'field' => 'email',
     'label' => 'E-Mail Address',

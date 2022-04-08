@@ -1,18 +1,15 @@
 @extends('backstage.templates.backstage')
 
 @section('tools')
-    {{-- @if( auth()->user()->hasLevel('admin') || auth()->user()->hasLevel('download') )
-        <form method="POST" action="{{ route('backstage.games.export') }}">
-            @csrf
-            <div class="grid grid-cols-4 gap-4 items-start pt-5">
-                <div class="col-start-2 col-span-3">
-                    <button type="submit" class="submit-button">
-                        Export csv
-                    </button>
-                </div>
+    @if( auth()->user()->hasLevel('admin') || auth()->user()->hasLevel('download') )
+        <div class="grid grid-cols-4 gap-4 items-start pt-5">
+            <div class="col-start-2 col-span-3">
+                <button onclick="window.livewire.emit('exportGamesToCSV')" class="submit-button">
+                    Export csv
+                </button>
             </div>
-        </form>
-    @endif --}}
+        </div>
+    @endif
 @endsection
 
 @section('content')
