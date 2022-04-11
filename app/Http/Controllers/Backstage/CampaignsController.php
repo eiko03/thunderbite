@@ -100,9 +100,10 @@ class CampaignsController extends Controller
     private function is_timed($date, $check){
         $carbon = Carbon::parse($date);
         if($check==1)
-            return $carbon->lt(Carbon::now());
-        else
             return $carbon->gt(Carbon::now());
+
+        else
+            return $carbon->lt(Carbon::now());
     }
 
     public function use(Campaign $campaign)

@@ -14,12 +14,12 @@ class SlotMachine extends Component
     public $board_string = '';
     public $total_points = 0;
     public $matched_paylines = [];
-    public $spin_limit;    
+    public $spin_limit;
     /**
      * Generate New Board
      */
     public function generateNewBoard(){
-        $symbols = Symbol::select('name', 'image', 'points_3_match', 'points_4_match', 'points_5_match')->get()->toArray();
+        $symbols = Symbol::get('name', 'image', 'points_3_match', 'points_4_match', 'points_5_match')->toArray();
         $this->board = [];
         $this->board_string = '';
 
@@ -59,7 +59,7 @@ class SlotMachine extends Component
                 '6-12-13-14-10',
                 '1-2-8-14-15',
                 '11-12-8-4-5'
-            ];    
+            ];
             $match_count = 0;
             foreach($paylines as $payline){
                 // when two or more symbols are the same next to each other the system gathers them in $connected
@@ -70,13 +70,13 @@ class SlotMachine extends Component
                 $previous   = collect(['name'=>'', 'image'=> '', 'points_3_match'=> 0, 'points_4_match'=> 0, 'points_5_match'=> 0]);
                 $current    = null;
                 $connected  = [];
-        
-                // score for 3, 4, 5, matches 
+
+                // score for 3, 4, 5, matches
                 $points_per_match   = 0;
                 $matched_symbol     = '';
                 $streak = 0;
                 $matches = 0;
-    
+
                 // takes the payline as a string, splits it at every whitespace and then trims the whitespaces away
                 $characters = array_map('trim', explode('-', $payline));
                 // loops through all the matching numbers in the recently split payline
@@ -91,7 +91,6 @@ class SlotMachine extends Component
                         $streak         = count($connected) + 1;
                     } else {
                         $connected  = [];
-                        $streak     = 0;
                     }
                     // if the streak is 3 symbols in a row
                     if($streak == 3){
@@ -114,10 +113,10 @@ class SlotMachine extends Component
                     // remembers the previous symbol
                     $previous = $multi_board[$number];
                 }
-    
+
                 // the total score sum
                 $this->total_points += $points_per_match;
-                
+
                 // which payline that won, and how many symbols in a row it was
                 if($points_per_match != 0){
                     $match_count++;
@@ -149,7 +148,7 @@ class SlotMachine extends Component
                     'payline'   => $payline,
                     'points'    => $points_per_match,
                 ]);
-                
+
                 // resets the $points_per_match
                 $points_per_match = 0;
                 $matched_symbol = '';
@@ -164,7 +163,7 @@ class SlotMachine extends Component
                     $symbols .= $item['symbol'].', ';
             }
             $game =[
-                'symbols'   => $symbols, 
+                'symbols'   => $symbols,
                 'points'    => $this->total_points,
             ];
             if( Prize::where('campaign_id', session()->get('activeCampaign'))->where('weight', '<=', $this->total_points)->count()){
@@ -177,7 +176,7 @@ class SlotMachine extends Component
             Game::where( 'id', session()->get('gameId'))->update($game);
             session()->remove('gameId');
         }
-    }    
+    }
 
     public function render()
     {

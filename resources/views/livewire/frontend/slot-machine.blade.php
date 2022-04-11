@@ -45,7 +45,6 @@
     window.livewire.on('outOfSpins', ()=>{
         swal({
             title: "You run out of spins",
-            // text: "You can do tomorrow again",
             icon: "info",
         });
     });
