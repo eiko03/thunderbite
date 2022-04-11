@@ -25,7 +25,7 @@ class CampaignsController extends Controller
     }
     public function index()
     {
-        $this->campRepo->index();
+        return $this->campRepo->index();
     }
 
 
@@ -36,7 +36,7 @@ class CampaignsController extends Controller
      */
     public function create()
     {
-        $this->campRepo->create();
+        return $this->campRepo->create();
     }
 
     /**
@@ -48,7 +48,7 @@ class CampaignsController extends Controller
      */
     public function store(StoreRequest $request)
     {
-        $this->campRepo->store($request);
+        return $this->campRepo->store($request);
     }
 
     /**
@@ -60,7 +60,7 @@ class CampaignsController extends Controller
      */
     public function show($id)
     {
-        $this->campRepo->show($id);
+        return $this->campRepo->show($id);
     }
 
     /**
@@ -71,7 +71,7 @@ class CampaignsController extends Controller
      */
     public function edit(Campaign $campaign)
     {
-        $this->campRepo->edit($campaign);
+        return $this->campRepo->edit($campaign);
     }
 
     /**
@@ -83,7 +83,7 @@ class CampaignsController extends Controller
      */
     public function update(UpdateRequest $request,Campaign $campaign)
     {
-        $this->campRepo->update($request,$campaign);
+        return $this->campRepo->update($request,$campaign);
     }
 
     /**
@@ -94,29 +94,39 @@ class CampaignsController extends Controller
      */
     public function destroy(Campaign $campaign)
     {
-        $this->campRepo->destroy($campaign);
+        return $this->campRepo->destroy($campaign);
+    }
+
+    private function is_timed($date, $check){
+        $carbon = Carbon::parse($date);
+        if($check==1)
+            return $carbon->lt(Carbon::now());
+        else
+            return $carbon->gt(Carbon::now());
     }
 
     public function use(Campaign $campaign)
     {
-        $now = Carbon::now();
-        if(Carbon::parse($campaign->starts_at)->gt($now)){
+        if($this->is_timed($campaign->starts_at,1))
             session()->flash('error', 'The campaign did not started yet');
-        }else if ( Carbon::parse($campaign->ends_at)->lt($now) ){
+
+        else if ( $this->is_timed($campaign->ends_at,0))
             session()->flash('error', 'The campaign already ended');
-        }else if( Symbol::count() > 10 ){
-            session()->flash('error', 'A maximum of 10 symbols should be existed. but it has '.Symbol::count());
-        }else if( Symbol::count() < 6 ){
-            session()->flash('error', 'A minimum of 6 symbols should be existed. but it has '.Symbol::count());
-        }else if ( Game::where('account', auth()->user()->username)->whereBetween('created_at', [Carbon::now()->startOfDay()->toDateTimeString(), Carbon::now()->endOfDay()->toDateTimeString()])->count() > 0 ){
-            session()->flash('error', 'you can only create 1 game per day');
+
+        else if( Symbol::count() > 10 )
+            session()->flash('error', 'A maximum of 10 symbols  existed. but it has '.Symbol::count());
+
+        else if( Symbol::count() < 6 )
+            session()->flash('error', 'A minimum of 6 symbols should existed. but it has '.Symbol::count());
+
+        else if (Game::is_daily_limit_exceeded() ){
+            session()->flash('error', 'you can create 1 game per day');
         }else{
             session()->put('activeCampaign', $campaign->id);
-            $game = new Game();
-            $game->campaign_id = $campaign->id;
-            $game->account = auth()->user()->username;
-            $game->save();
-            session()->put('gameId', $game->id);
+            session()->put('gameId', Game::create([
+                'campaign_id'=>$campaign->id,
+                'account' => auth()->user()->username
+            ])->id);
         }
         return redirect()->route('backstage.campaigns.index');
     }

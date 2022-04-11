@@ -16,6 +16,15 @@ class Game extends Model
         'revealed_at',
     ];
 
+    public static function is_daily_limit_exceeded(){
+        return Game::where('account', auth()->user()->username)->whereBetween(
+            'created_at',
+            [
+                Carbon::now()->startOfDay()->toDateTimeString(),
+                Carbon::now()->endOfDay()->toDateTimeString()
+            ])->count() > 0 ;
+    }
+
     public static function filter($filter1, $filter2, $filter3, $filter4)
     {
         $query = self::query();
