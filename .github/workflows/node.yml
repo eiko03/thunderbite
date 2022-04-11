@@ -5,9 +5,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Downgrade npm version
+        uses: reedyuk/npm-version@1.1.1
+        with:
+          version: '6.0.1'
+
+      - name: Downgrade node version
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
 
       - name: install
-        run : npm install
+        run : npm ci
 
       - name: dev
         run : npm run dev
