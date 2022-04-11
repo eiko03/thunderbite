@@ -1,5 +1,5 @@
 on: push
-name: CI
+name: Php Unit test
 jobs:
   phpunit:
     runs-on: ubuntu-latest
@@ -17,9 +17,9 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
         with:
-          fetch-depth: 1
+          fetch-depth: 0
 
       - name: Install composer dependencies
         run: |
