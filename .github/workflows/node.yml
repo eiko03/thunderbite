@@ -1,0 +1,19 @@
+name: Run Unit Tests and Lint Files
+"on": push
+jobs:
+  unit_test-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: install
+        run : npm install
+
+      - name: dev
+        run : npm run dev
+
+      - name: setup njsscan
+        run : pip install njsscan
+
+      - name: nodejsscan
+        run: njsscan path ./src

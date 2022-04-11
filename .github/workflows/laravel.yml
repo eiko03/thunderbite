@@ -12,6 +12,7 @@ jobs:
         env:
           MYSQL_USER: newuser
           MYSQL_PASSWORD: passwor434@Aas!d
+          MYSQL_ROOT_PASSWORD: passwor434@Aas!d
           MYSQL_DATABASE: thunderbite_backend_test
         ports:
           - 33306:3306
