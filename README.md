@@ -1,5 +1,6 @@
 # Thunderbite Backend Test
-
+![laravel_badge](https://github.com/eiko03/thunderbite/actions/workflows/laravel.yml/badge.svg)
+![node_badge](https://github.com/eiko03/thunderbite/actions/workflows/node.yml/badge.svg)
 This test is designed to test your laravel and algorithm knowledge and it is a good representation of your core skills that are required to become a Thunderbite team member.
 
 ## Installation
